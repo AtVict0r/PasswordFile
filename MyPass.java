@@ -14,13 +14,13 @@ class MyPass {
   private Scanner myInput = null; // collect user input
 
   public MyPass(){
-    pass = new MyFile(this.folderName, this.fileName);
-    inputData = pass.readFile();
+    this.pass = new MyFile(folderName, fileName);
+    this.inputData = this.pass.readFile();
   }
 
   public void usrLogin(){
     System.out.print("Enter User Name ");
-    System.out.print("(Guest Users Enter 'G'/'g'):");
+    System.out.print("(Guest Users Enter 'G'/'g'): ");
     this.usrName = setClassString().toUpperCase();
     if(this.usrName.contentEquals("G")){
       this.allowUsr = true;
@@ -42,8 +42,8 @@ class MyPass {
   }
 
   private String setClassString(){
-    myInput = new Scanner(System.in);
-    return myInput.next();
+    this.myInput = new Scanner(System.in);
+    return this.myInput.next();
   }
 
   private boolean chkUsrName(){
@@ -124,7 +124,7 @@ class MyPass {
 
   private void endProg(){
     this.allowUsr = false;
-    System.out.println("Ending Program");
+    //System.out.println("Ending Program");
   }
 
   public String getUsrNam(){
@@ -132,7 +132,7 @@ class MyPass {
   }
 
   public String getUsrDir(){
-    return (this.folderName + "/" + this.usrName + "/");
+    return (this.folderName + "/" + this.usrName);
   }
 
   public boolean getAuthAllow(){

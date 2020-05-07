@@ -4,10 +4,10 @@ import java.io.IOException;  // Import the IOException class to handle errors
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.ArrayList; // Import the ArrayList class to store list of data with undetermined size
+import java.util.Arrays; // Import the Arrays class
 
 class MyFile {
-  private String folderName = null;
-  private String fileName = null;
+  private String dirName = null;
   private final String fileFormat = ".txt";
   private String filePath = null;
 
@@ -18,15 +18,17 @@ class MyFile {
     // Create new directory using argument as directory name
     newDir = new File(folderNameString);
     createDir();
+    this.dirName = folderNameString;
   }
   
   public MyFile(String folderNameString, String fileNameString){
     // Create new directory using argument as directory name
     newDir = new File(folderNameString);
     createDir();
+    this.dirName = folderNameString;
 
     // Create new file using argument as file name
-    this.filePath = folderNameString + "/" + fileNameString + fileFormat;   
+    this.filePath = this.dirName + "/" + fileNameString + fileFormat;   
     newFile = new File(filePath);
     createFile();
   }
@@ -34,7 +36,7 @@ class MyFile {
   public void createDir() {
     try {
       if(newDir.mkdirs()){
-      System.out.println("The folder has been successfully created");
+      System.out.println("The user has been successfully created");
       } /** else {
         System.out.println("File already exists.");
       } **/
@@ -47,7 +49,7 @@ class MyFile {
   public void createFile() {
     try {
       if (newFile.createNewFile()) {
-        System.out.println("File created: " + newFile.getName());
+        System.out.println("List created: " + newFile.getName());
       } /** else {
         System.out.println("File already exists.");
       } **/
@@ -65,7 +67,7 @@ class MyFile {
           myWriter.write(line + "\n");
         }
         myWriter.close();
-        System.out.println("Successfully wrote to the file.");
+        System.out.println("Saved List.");
       } else {
         System.out.println("The file is not writeable.");
       }
@@ -98,28 +100,65 @@ class MyFile {
     return newFile.exists();
   }
 
-  public void fileInfo() {
+  public boolean getDirInfo() {
+    return newDir.exists();
+  }
+
+  public boolean isEmpty(){
+    //System.out.println("File size in bytes " + newFile.length());
+    if(newFile.length() > 1){
+      return false;
+    }
+    return true;
+  }
+
+  public String getFileSize(String fileNameString){
+    File getFileSize = new File(this.dirName + "/" + fileNameString);
+    if(getFileSize.length() != 0){
+      return "Not Empty";
+    }
+    return "Empty";
+  }
+
+  public void filePath() {
     if (newFile.exists()) {
       System.out.println("Absolute path: " + newFile.getAbsolutePath());
-      System.out.println("File size in bytes " + newFile.length());
     } else {
       System.out.println("The file does not exist.");
     }
   }
 
-  public void deleteFile(String folderName, String fileName) { 
+  public ArrayList<String> getFileNames(){
+    String[] tempFileNameArr = newDir.list();
+    Arrays.sort(tempFileNameArr);
+    ArrayList<String> myFiles = new ArrayList<String>(Arrays.asList(tempFileNameArr));
+    return myFiles;
+  }
+
+  public void deleteFile() { 
     if (newFile.delete()) { 
       System.out.println("Deleted the file: " + newFile.getName());
     } else {
-      System.out.println("Failed to delete the file.");
+      System.out.println("Failed to deleten file: " + newFile.getName());
     } 
   } 
 
-  public void deleteFolder(String folderName) {  
-    if (newFile.delete()) { 
-      System.out.println("Deleted the folder: " + newFile.getName());
+  public boolean deleteDir() {
+    String[] myFiles = newDir.list();
+    for(String trashFile : myFiles){
+      File deleteFile = new File(this.dirName + "/" + trashFile);
+      if (deleteFile.delete()) { 
+      System.out.println("Deleted file: " + deleteFile.getName() + " from " + this.dirName);
+      } else {
+      System.out.println("Failed to delete file: " + deleteFile.getName());
+      } 
+    }
+    if (newDir.delete()) { 
+      System.out.println("Removed User: " + newDir.getName());
+      return true;
     } else {
-      System.out.println("Failed to delete the folder.");
+      System.out.println("Failed to Remove User: " + newDir.getName());
+      return false;
     } 
   }  
 }
